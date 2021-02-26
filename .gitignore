@@ -1,0 +1,5 @@
+#ignora la carpeta __pycache__ y su contenido
+__pycache__
+
+#ingora la carpeta env y su contenido
+env
