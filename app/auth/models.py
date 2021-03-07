@@ -2,7 +2,7 @@ from flask_login import UserMixin #implementa propiedades y metodos (is_authenti
 from werkzeug.security import generate_password_hash, check_password_hash #hash a la contraseña
 from bson.objectid import ObjectId #convertir un String a ObjectId
 
-from run import db #importo la bd
+from app import db #importo la bd
 
 
 class User(UserMixin):

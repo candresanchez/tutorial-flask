@@ -1,6 +1,8 @@
 from flask import url_for #crea un url a partir del nombre de la función que contiene el decorador route
 from slugify import slugify #crea un slug a partir de una cadena
 
+from app import db #importo la bd
+
 
 #Modelo Post 
 class Post():
@@ -36,7 +38,7 @@ class Post():
             return post_id
     
     def public_url(self):
-        return url_for('show_post', slug=self.title_slug)
+        return url_for('public.show_post', slug=self.title_slug)
     
     @staticmethod
     def get_by_slug(slug):        
