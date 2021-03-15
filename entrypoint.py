@@ -1,5 +1,3 @@
-# Por ejemplo, APP_SETTINGS_MODULE = config.default
-
 import os
 
 from app import create_app
