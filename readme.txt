@@ -1,7 +1,7 @@
 pip freeze: Lista todas las dependencias de nuestra aplicación
 FLASK_RUN_PORT: configurar puerto diferernte al 5000 que tiene por defecto flask
-FLASK_ENV="development"  Activar el modo debud a desarrollo para que los cambios en el código
-                         automáticamente reinicie el servidor
+FLASK_ENV="development"  Automaticamente activa el modo debud a desarrollo para que los cambios en el código
+                         automáticamente reinicie el servidor.  Se deseo desactivarlo configuro FLASK_DEBUG=FALSE
 flask run --port 6000: al ejecutar flask se configura el puerto
 flask run --host 0.0.0.0 : aceptar peticiones de otros ordenadores de nuestra red
 

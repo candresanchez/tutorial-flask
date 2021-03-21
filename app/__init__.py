@@ -1,6 +1,7 @@
 from flask import Flask  #Toda app Flask es una instancia WSGI de la clase Flask
 from flask_login import LoginManager #Implementa el Login de usuarios
 from pymongo import MongoClient #driver para MongoDb
+from flask import render_template
 
 login_manager = LoginManager() #crea un objeto
 #Conexión a MongoDb
@@ -30,6 +31,20 @@ def create_app(settings_module):
     from .public import public_bp
     app.register_blueprint(public_bp)
 
+    # Personalizar controladores de errores
+    register_error_handler(app)    
+
     return app
+
+#Paginas de error personalizadas
+def register_error_handler(app):
+    
+    @app.errorhandler(500)
+    def base_error_handler(e):
+        return render_template('500.html'), 500
+    
+    @app.errorhandler(404)
+    def error_404_handler(e):
+        return render_template('404.html'), 404
 
     
