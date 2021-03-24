@@ -15,3 +15,15 @@ APP_ENV_DEVELOPMENT = 'development'
 APP_ENV_STAGING = 'staging'
 APP_ENV_PRODUCTION = 'production'
 APP_ENV = ''
+
+# Configuración del email
+# Tengo que configurar GMAIL para que acepte conexiones a mi cuenta de aplicaciones poco seguras
+# Ir a Seguridad->Activar Acceso de Aplicaciones poco seguras
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 587
+MAIL_USERNAME = 'candresanchez81@gmail.com'
+MAIL_PASSWORD = '*CaOs8104'
+DONT_REPLY_FROM_EMAIL = 'candresanchez81@gmail.com'
+ADMINS = ('candresanchez81@gmail.com')
+MAIL_USE_TLS = True
+MAIL_DEBUG = False
