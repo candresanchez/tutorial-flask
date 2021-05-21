@@ -25,7 +25,7 @@ def show_post(slug):
     loggeer.debug(f'Slug: {slug}')
     post = Post.get_by_slug(slug)
     if post is None:
-        #abort(404)
+        #abort(404) este también funciona
         raise NotFound(slug)
     return render_template("public/post_view.html", post=post)
 

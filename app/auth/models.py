@@ -30,6 +30,13 @@ class User(UserMixin):
             user_id=db['user'].insert_one(user).inserted_id
             return user_id
     
+    def delete(user_id):
+        count_user_deleted = 0
+        if ObjectId.is_valid(user_id):
+            count_user_deleted = db['user'].delete_one({"_id": ObjectId(user_id)}).deleted_count
+        return count_user_deleted
+
+    
     def __repr__(self):
         return '<User {}>'.format(self.email)
     
@@ -53,3 +60,13 @@ class User(UserMixin):
             user.id = u['_id']        
             return user
         return None
+    
+    @staticmethod
+    def get_all():
+        list_user = []
+        for u in db["user"].find():
+            user = User(u['name'], u['email'], p['is_admin'])
+            user.password= u['password']            
+            user.id = u['_id'] 
+            list_user.append(user)
+        return list_user

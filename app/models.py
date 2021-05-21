@@ -1,5 +1,6 @@
 from flask import url_for #crea un url a partir del nombre de la función que contiene el decorador route
 from slugify import slugify #crea un slug a partir de una cadena
+from bson.objectid import ObjectId #convertir un String a ObjectId
 
 from app import db #importo la bd
 
@@ -16,29 +17,39 @@ class Post():
     def __repr__(self):
         return f'<Post {self.title}>'
     
-    def save(self):        
+    def save(self):                
         if not self.title_slug:
-            self.title_slug = slugify(self.title)
-            print(self.title_slug)
-        existe_slug = existe_slug = Post.get_by_slug(self.title_slug) #verifica si el slug ya existe
+            self.title_slug = slugify(self.title)            
+        existe_slug = Post.get_by_slug(self.title_slug) #verifica si el slug ya existe
         count = 0
         #si el slug existe genera agrega un número al final
         while existe_slug is not None:
             count += 1
             self.title_slug = f'{slugify(self.title)}-{count}'
-            existe_slug = existe_slug = Post.get_by_slug(self.title_slug)
-        if not self.id:            
+            existe_slug = Post.get_by_slug(self.title_slug)
+        # Valida para verificar si guarda o modifica
+        if not self.id: #Guarda
             post = {
-                "user_id": self.user_id,
-                "title": self.title,
-                "title_slug": self.title_slug,
-                "content": self.content
-                }
-            post_id=db['post'].insert_one(post).inserted_id
+            "user_id": self.user_id,
+            "title": self.title,
+            "title_slug": self.title_slug,
+            "content": self.content
+            }        
+            post_id = db['post'].insert_one(post).inserted_id
             return post_id
+        else: # Modifica 
+            count_post_deleted = db["post"].update_one({"_id": ObjectId(self.id)}, 
+                {"$set": {"title":self.title, "title_slug":self.title_slug, "content":self.content}}).modified_count
+            return count_post_deleted
     
-    def public_url(self):
-        return url_for('public.show_post', slug=self.title_slug)
+    def delete(post_id):
+        count_post_deleted = 0
+        if ObjectId.is_valid(post_id):
+            count_post_deleted = db['post'].delete_one({"_id": ObjectId(post_id)}).deleted_count
+        return count_post_deleted
+    
+    #def public_url(self):
+    #    return url_for('public.show_post', slug=self.title_slug)
     
     @staticmethod
     def get_by_slug(slug):        
@@ -59,3 +70,15 @@ class Post():
             post.title_slug = p['title_slug'] 
             posts.append(post) 
         return posts
+    
+    @staticmethod
+    def get_by_id(post_id):
+        p = None
+        if ObjectId.is_valid(post_id): #chequea si un string OID es válido, tiene la notación de MongoDB      
+            p = db['post'].find_one({ "_id": ObjectId(post_id)})        
+        if p is not None:            
+            post = Post(p['user_id'], p['title'], p['content'])
+            post.id = p['_id']
+            post.title_slug = p['title_slug']            
+            return post
+        return None

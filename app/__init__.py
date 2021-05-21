@@ -50,6 +50,10 @@ def register_error_handler(app):
     @app.errorhandler(404)
     def error_404_handler(e):
         return render_template('404.html'), 404
+    
+    @app.errorhandler(401)
+    def error_401_handler(e):
+        return render_template('401.html'), 401
 
 #Modificando la configuración del logger por defecto de Flask
 def configure_logging(app) :
@@ -64,7 +68,7 @@ def configure_logging(app) :
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(verbose_formatter())
 
-    # Crear un manejador para escribir los mensajes en archivo
+    # Código para Crear un manejador para escribir los mensajes en archivo
     #file_handler = logging.FileHandler('ARCHIVO_LOG')
     #file_handler.setFormatter(verbose_formatter())    
     #handlers.append(file_handler)
@@ -82,8 +86,7 @@ def configure_logging(app) :
         mail_handler = SMTPHandler((app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
             app.config['DONT_REPLY_FROM_EMAIL'], app.config['ADMINS'],
             '[Error] [{}] La aplicación falló'.format(app.config['APP_ENV']),
-            (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD']),())
-        print('llego aqui')
+            (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD']),())        
         mail_handler.setLevel(logging.ERROR)
         mail_handler.setFormatter(mail_handler_formatter())
         handlers.append(mail_handler)
@@ -95,7 +98,7 @@ def configure_logging(app) :
         l.propagate = False
         l.setLevel(logging.DEBUG)
     
-    # Creación un logger con un handler especifico para escribir en disco para un módulo especifico
+    # Código para la Creación un logger con un handler especifico para escribir en disco para un módulo especifico
     #l = logging.getLogger('app.public.routes')
     #file_handler = logging.FileHandler('ARCHIVO_LOG')
     #file_handler.setFormatter(verbose_formatter())
